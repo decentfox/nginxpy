@@ -6,7 +6,7 @@
 
 import unittest
 
-from nginxpy import nginxpy
+from nginx import _nginx
 
 
 class TestNginxpy(unittest.TestCase):

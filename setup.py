@@ -3,7 +3,7 @@
 
 """The setup script."""
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
@@ -11,11 +11,15 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [ ]
+requirements = []
 
-setup_requirements = [ ]
+setup_requirements = []
 
-test_requirements = [ ]
+test_requirements = []
+
+nginxpy = Extension('nginx._nginx', sources=[
+    'nginx/nginx.pyx',
+])
 
 setup(
     author="DecentFoX Studio",
@@ -36,7 +40,8 @@ setup(
     include_package_data=True,
     keywords='nginxpy',
     name='nginxpy',
-    packages=find_packages(include=['nginxpy']),
+    packages=find_packages(include=['nginx']),
+    ext_modules=[nginxpy],
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
