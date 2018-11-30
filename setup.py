@@ -128,11 +128,16 @@ class nginxpy_build(build):
         super().run()
 
 
-nginxpy = Extension('nginx._nginx', sources=[
-    'nginx/ngx_python_module.c',
-    'nginx/ngx_python_module_modules.c',
-    'nginx/nginx.pyx',
-])
+nginxpy = Extension(
+    'nginx._nginx',
+    sources=[
+        'nginx/ngx_python_module.c',
+        'nginx/ngx_python_module_modules.c',
+        'nginx/nginx.pyx',
+    ], depends=[
+        'nginx/cycle.pyx',
+        'nginx/log.pyx',
+    ])
 
 setup(
     author="DecentFoX Studio",
