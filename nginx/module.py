@@ -7,10 +7,13 @@ _modules = []
 
 class BaseModule:
     def init_process(self):
-        raise NotImplementedError
+        pass
+
+    async def after_init_process(self):
+        pass
 
     def exit_process(self):
-        raise NotImplementedError
+        pass
 
 
 def load_modules():

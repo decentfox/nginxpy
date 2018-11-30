@@ -3,6 +3,7 @@ import logging
 
 from .. import NginxEventLoopPolicy
 from ..module import BaseModule
+from ..hooks import after_init_process
 
 log = logging.Logger(__name__)
 
@@ -15,16 +16,15 @@ class AsyncioModule(BaseModule):
         # noinspection PyProtectedMember
         asyncio.events._set_running_loop(loop)
         log.debug('created event loop: %r', loop)
-        loop.call_later(0, loop.create_task, main())
+        loop.call_later(0, loop.create_task, after_init_process())
+
+    async def after_init_process(self):
+        log.info('Hello, asyncio!')
+        await asyncio.sleep(1)
+        log.info('Hello, timer!')
 
     def exit_process(self):
         log.debug('exit_process')
         # noinspection PyProtectedMember
         asyncio.events._set_running_loop(None)
         asyncio.set_event_loop_policy(None)
-
-
-async def main():
-    log.info('Hello, asyncio!')
-    await asyncio.sleep(1)
-    log.info('Hello, timer!')
