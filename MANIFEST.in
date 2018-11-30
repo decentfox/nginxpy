@@ -5,6 +5,8 @@ include LICENSE
 include README.rst
 include nginx/config
 
+recursive-include nginx *.pyx
+recursive-include nginx *.pxd
 recursive-include tests *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]

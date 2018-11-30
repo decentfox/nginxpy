@@ -20,8 +20,6 @@ with open('HISTORY.rst') as history_file:
 
 requirements = []
 
-setup_requirements = []
-
 test_requirements = []
 
 
@@ -43,8 +41,9 @@ class nginxpy_build(build):
             try:
                 while True:
                     val = next(params)
-                    if val == '--add-dynamic-module':
-                        next(params)
+                    if val.startswith('--add-dynamic-module'):
+                        if val == '--add-dynamic-module':
+                            next(params)
                     else:
                         yield val
             except StopIteration:
@@ -160,14 +159,13 @@ setup(
     include_package_data=True,
     keywords='nginxpy',
     name='nginxpy',
-    packages=find_packages(include=['nginx']),
+    packages=find_packages(include=['nginx', 'nginx.asyncio']),
     ext_modules=[nginxpy],
     cmdclass=dict(build=nginxpy_build),
     entry_points='''\
     [nginx]
     module = nginx.asyncio:AsyncioModule
     ''',
-    setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/decentfox/nginxpy',

@@ -6,7 +6,10 @@ __author__ = """DecentFoX Studio"""
 __email__ = 'foss@decentfox.com'
 __version__ = '0.1.0'
 
-from ._nginx import (
-    Cycle, Log, get_current_cycle,
-    NginxEventLoop, NginxEventLoopPolicy, Event,
-)
+try:
+    from ._nginx import (
+        Cycle, Log, get_current_cycle,
+        NginxEventLoop, NginxEventLoopPolicy, Event,
+    )
+except ImportError:
+    print('Cannot import nginx, should load in NGINX first')
