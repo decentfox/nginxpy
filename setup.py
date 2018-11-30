@@ -93,6 +93,7 @@ class nginxpy_build(build):
         nginx_cflags = subprocess.getoutput(
             'make -f ' + nginx_make + ' print-CFLAGS')
         nginx_cflags = re.findall(r'CFLAGS = (.*)', nginx_cflags)[0].split()
+        nginx_cflags = list(filter(lambda x: x != '-Werror', nginx_cflags))
         nginx_all_incs = subprocess.getoutput(
             'make -f ' + nginx_make + ' print-ALL_INCS')
         nginx_all_incs = re.findall(r'ALL_INCS = (.*)', nginx_all_incs)[0]
