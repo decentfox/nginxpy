@@ -14,6 +14,7 @@ cdef extern from "ngx_core.h":
     const int NGX_LOG_DEBUG
 
     ctypedef int ngx_err_t
+    ctypedef int ngx_msec_t
 
     ctypedef struct ngx_log_t:
         pass
@@ -21,6 +22,12 @@ cdef extern from "ngx_core.h":
     ctypedef struct ngx_cycle_t:
         ngx_log_t *log
 
+    ctypedef struct ngx_queue_t:
+        ngx_queue_t *prev
+        ngx_queue_t *next
+
+    void *ngx_calloc(size_t size, ngx_log_t *log)
+    void ngx_free(void *p)
     void ngx_log_error(ngx_uint_t level,
                        ngx_log_t *log,
                        ngx_err_t err,

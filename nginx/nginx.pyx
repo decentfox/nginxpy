@@ -48,3 +48,4 @@ cdef public void nginxpy_exit_process(ngx_cycle_t *cycle):
 
 include "log.pyx"
 include "cycle.pyx"
+include "asyncio/loop.pyx"

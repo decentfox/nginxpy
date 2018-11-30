@@ -139,6 +139,7 @@ nginxpy = Extension(
     ], depends=[
         'nginx/cycle.pyx',
         'nginx/log.pyx',
+        'nginx/asyncio/loop.pyx',
     ])
 
 setup(
