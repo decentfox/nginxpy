@@ -8,6 +8,7 @@ from .nginx_core cimport NGX_OK, NGX_ERROR
 from .nginx_core cimport NGX_LOG_DEBUG, NGX_LOG_CRIT
 from .nginx_core cimport ngx_log_error
 
+from . import hooks
 
 cdef public ngx_int_t nginxpy_init_process(ngx_cycle_t *cycle):
     ngx_log_error(NGX_LOG_DEBUG, cycle.log, 0,
@@ -17,8 +18,7 @@ cdef public ngx_int_t nginxpy_init_process(ngx_cycle_t *cycle):
         global current_cycle
         current_cycle = Cycle.from_ptr(cycle)
         set_last_resort(current_cycle.log)
-        import sys
-        logging.info('Hello, logging! %r', sys.path)
+        hooks.init_process()
     except:
         ngx_log_error(NGX_LOG_CRIT, cycle.log, 0,
                       b'Error occured in init_process:\n' +
@@ -35,6 +35,7 @@ cdef public void nginxpy_exit_process(ngx_cycle_t *cycle):
     # noinspection PyBroadException
     try:
         global current_cycle
+        hooks.exit_process()
         unset_last_resort()
         current_cycle = None
     except:

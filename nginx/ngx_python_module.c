@@ -106,7 +106,7 @@ ngx_python_init_process(ngx_cycle_t *cycle) {
         }
     }
     Py_SetProgramName(python_exec);
-    if (PyImport_AppendInittab("nginx", PyInit__nginx) == -1) {
+    if (PyImport_AppendInittab("nginx._nginx", PyInit__nginx) == -1) {
         ngx_log_error(NGX_LOG_CRIT, cycle->log, 0,
                       "Could not initialize nginxpy extension.");
         return NGX_ERROR;
@@ -114,7 +114,7 @@ ngx_python_init_process(ngx_cycle_t *cycle) {
     ngx_log_error(NGX_LOG_NOTICE, cycle->log, 0,
                   "Initializing Python...");
     Py_Initialize();
-    if (PyImport_ImportModule("nginx") == NULL) {
+    if (PyImport_ImportModule("nginx._nginx") == NULL) {
         ngx_log_error(NGX_LOG_CRIT, cycle->log, 0,
                       "Could not import nginxpy extension.");
         return NGX_ERROR;

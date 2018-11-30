@@ -16,3 +16,6 @@ cdef class Cycle:
         return rv
 
 cdef Cycle current_cycle = None
+
+def get_current_cycle():
+    return current_cycle
