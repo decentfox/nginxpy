@@ -1,10 +1,10 @@
 # cython: language_level=3
 
-cdef extern from "ngx_config.h":
-    ctypedef int ngx_int_t
+from .nginx_config cimport ngx_int_t
+from .nginx_core cimport ngx_cycle_t, NGX_OK
 
-cdef public ngx_int_t nginxpy_init_process():
-    return 0
+cdef public ngx_int_t nginxpy_init_process(ngx_cycle_t *cycle):
+    return NGX_OK
 
-cdef public void nginxpy_exit_process():
+cdef public void nginxpy_exit_process(ngx_cycle_t *cycle):
     pass

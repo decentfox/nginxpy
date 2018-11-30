@@ -110,12 +110,12 @@ ngx_python_init_process(ngx_cycle_t *cycle) {
                       "Could not import nginxpy extension.");
         return NGX_ERROR;
     }
-    return nginxpy_init_process();
+    return nginxpy_init_process(cycle);
 }
 
 static void
 ngx_python_exit_process(ngx_cycle_t *cycle) {
-    nginxpy_exit_process();
+    nginxpy_exit_process(cycle);
     ngx_log_error(NGX_LOG_NOTICE, cycle->log, 0,
                   "Finalizing Python...");
     if (Py_FinalizeEx() < 0) {
