@@ -30,7 +30,40 @@ Embed Python in NGINX.
 Features
 --------
 
-* TODO
+* Standard Python package with Cython extension
+* Automatically build into NGINX dynamic module for current NGINX install
+* Run embeded Python in NGINX worker processes
+* Write NGINX modules in Python or Cython
+* Python ``logging`` module redirected to NGINX ``error.log``
+* (ongoing) NGINX event loop wrapped as Python ``asyncio`` interface
+* (TBD) Python and Cython interface to most NGINX code
+* (TBD) Adapt NGINX web server to WSGI, ASGI and aiohttp interfaces
+
+
+Installation
+------------
+
+1. Install NGINX in whatever way, make sure ``nginx`` command is available.
+2. ``pip install nginxpy``, or get the source and run ``pip install .``. You
+   may want to add the ``-v`` option, because the process is a bit slow
+   downloading Cython, NGINX source code and configuring it. The usual ``python
+   setup.py install`` currently doesn't work separately - you should run
+   ``python setup.py build`` first.
+3. Run ``python -c 'import nginx'`` to get NGINX configuration hint.
+4. Update NGINX configuration accordingly and reload NGINX.
+5. See NGINX ``error.log`` for now.
+
+
+Development
+-----------
+
+1. Install NGINX in whatever way, make sure ``nginx`` command is available.
+2. Checkout source code.
+3. Run ``python setup.py build`` and ``python setup.py develop``.
+4. Run ``python -c 'import nginx'`` to get NGINX configuration hint.
+5. Update NGINX configuration accordingly and reload NGINX.
+6. See NGINX ``error.log`` for now.
+
 
 Credits
 -------
