@@ -43,7 +43,9 @@ class NginxLogHandler(logging.Handler):
         elif record.levelno == logging.CRITICAL:
             level = NGX_LOG_CRIT
         ngx_log_error(level, (<Log> self._log).log, 0,
-                      record.getMessage().encode())
+                      '[{}] {}'.format(
+                          record.name,
+                          record.getMessage()).encode())
 
     def createLock(self):
         pass

@@ -163,6 +163,10 @@ setup(
     packages=find_packages(include=['nginx']),
     ext_modules=[nginxpy],
     cmdclass=dict(build=nginxpy_build),
+    entry_points='''\
+    [nginx]
+    module = nginx.asyncio:AsyncioModule
+    ''',
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
