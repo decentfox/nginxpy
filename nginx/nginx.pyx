@@ -17,7 +17,8 @@ cdef public ngx_int_t nginxpy_init_process(ngx_cycle_t *cycle):
         global current_cycle
         current_cycle = Cycle.from_ptr(cycle)
         set_last_resort(current_cycle.log)
-        logging.info('Hello, logging!')
+        import sys
+        logging.info('Hello, logging! %r', sys.path)
     except:
         ngx_log_error(NGX_LOG_CRIT, cycle.log, 0,
                       b'Error occured in init_process:\n' +

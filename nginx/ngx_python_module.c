@@ -16,7 +16,7 @@ static void ngx_python_exit_process(ngx_cycle_t *cycle);
 
 static char *ngx_python_enable(ngx_conf_t *cf, void *post, void *data);
 static ngx_conf_post_t  ngx_python_enable_post = { ngx_python_enable };
-
+static wchar_t *python_exec = NULL;
 
 static ngx_command_t  ngx_python_commands[] = {
 
@@ -97,6 +97,15 @@ ngx_python_enable(ngx_conf_t *cf, void *post, void *data)
 
 static ngx_int_t
 ngx_python_init_process(ngx_cycle_t *cycle) {
+    if (python_exec == NULL) {
+        python_exec = Py_DecodeLocale(PYTHON_EXEC, NULL);
+        if (python_exec == NULL) {
+            ngx_log_error(NGX_LOG_CRIT, cycle->log, 0,
+                          "Could not decode Python executable path.");
+            return NGX_ERROR;
+        }
+    }
+    Py_SetProgramName(python_exec);
     if (PyImport_AppendInittab("nginx", PyInit__nginx) == -1) {
         ngx_log_error(NGX_LOG_CRIT, cycle->log, 0,
                       "Could not initialize nginxpy extension.");

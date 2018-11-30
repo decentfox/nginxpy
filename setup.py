@@ -134,6 +134,8 @@ nginxpy = Extension(
         'nginx/ngx_python_module.c',
         'nginx/ngx_python_module_modules.c',
         'nginx/nginx.pyx',
+    ], define_macros=[
+        ('PYTHON_EXEC', '"{}"'.format(os.path.abspath(sys.executable))),
     ], depends=[
         'nginx/cycle.pyx',
         'nginx/log.pyx',
