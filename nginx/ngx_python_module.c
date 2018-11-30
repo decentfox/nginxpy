@@ -1,5 +1,7 @@
 #include <ngx_config.h>
 #include <ngx_core.h>
+#include <Python.h>
+#include "nginx.h"
 
 
 typedef struct {
@@ -9,6 +11,8 @@ typedef struct {
 
 static void *ngx_python_create_conf(ngx_cycle_t *cycle);
 static char *ngx_python_init_conf(ngx_cycle_t *cycle, void *conf);
+static ngx_int_t ngx_python_init_process(ngx_cycle_t *cycle);
+static void ngx_python_exit_process(ngx_cycle_t *cycle);
 
 static char *ngx_python_enable(ngx_conf_t *cf, void *post, void *data);
 static ngx_conf_post_t  ngx_python_enable_post = { ngx_python_enable };
@@ -41,10 +45,10 @@ ngx_module_t  ngx_python_module = {
         NGX_CORE_MODULE,                       /* module type */
         NULL,                                  /* init master */
         NULL,                                  /* init module */
-        NULL,                                  /* init process */
+        ngx_python_init_process,               /* init process */
         NULL,                                  /* init thread */
         NULL,                                  /* exit thread */
-        NULL,                                  /* exit process */
+        ngx_python_exit_process,               /* exit process */
         NULL,                                  /* exit master */
         NGX_MODULE_V1_PADDING
 };
@@ -89,4 +93,33 @@ ngx_python_enable(ngx_conf_t *cf, void *post, void *data)
     ngx_log_error(NGX_LOG_NOTICE, cf->log, 0, "Python Module is enabled");
 
     return NGX_CONF_OK;
+}
+
+static ngx_int_t
+ngx_python_init_process(ngx_cycle_t *cycle) {
+    if (PyImport_AppendInittab("nginx", PyInit__nginx) == -1) {
+        ngx_log_error(NGX_LOG_CRIT, cycle->log, 0,
+                      "Could not initialize nginxpy extension.");
+        return NGX_ERROR;
+    }
+    ngx_log_error(NGX_LOG_NOTICE, cycle->log, 0,
+                  "Initializing Python...");
+    Py_Initialize();
+    if (PyImport_ImportModule("nginx") == NULL) {
+        ngx_log_error(NGX_LOG_CRIT, cycle->log, 0,
+                      "Could not import nginxpy extension.");
+        return NGX_ERROR;
+    }
+    return nginxpy_init_process();
+}
+
+static void
+ngx_python_exit_process(ngx_cycle_t *cycle) {
+    nginxpy_exit_process();
+    ngx_log_error(NGX_LOG_NOTICE, cycle->log, 0,
+                  "Finalizing Python...");
+    if (Py_FinalizeEx() < 0) {
+        ngx_log_error(NGX_LOG_CRIT, cycle->log, 0,
+                      "Failed to finalize Python!");
+    }
 }
