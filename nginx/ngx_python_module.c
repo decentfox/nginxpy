@@ -1,5 +1,6 @@
 #include <ngx_config.h>
 #include <ngx_core.h>
+#include <ngx_http.h>
 #include <Python.h>
 #include "nginx.h"
 
@@ -10,10 +11,18 @@ static void ngx_python_exit_process(ngx_cycle_t *cycle);
 static wchar_t *python_exec = NULL;
 
 
-static ngx_core_module_t  ngx_python_module_ctx = {
-        ngx_string("python"),
-        NULL,
-        NULL
+static ngx_http_module_t  ngx_python_module_ctx  = {
+    NULL,                                  /* preconfiguration */
+    NULL,                                  /* postconfiguration */
+
+    NULL,                                  /* create main configuration */
+    NULL,                                  /* init main configuration */
+
+    NULL,                                  /* create server configuration */
+    NULL,                                  /* merge server configuration */
+
+    NULL,                                  /* create location configuration */
+    NULL                                   /* merge location configuration */
 };
 
 
@@ -21,7 +30,7 @@ ngx_module_t  ngx_python_module = {
         NGX_MODULE_V1,
         &ngx_python_module_ctx,                /* module context */
         NULL,                                  /* module directives */
-        NGX_CORE_MODULE,                       /* module type */
+        NGX_HTTP_MODULE,                       /* module type */
         NULL,                                  /* init master */
         NULL,                                  /* init module */
         ngx_python_init_process,               /* init process */

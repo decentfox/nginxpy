@@ -1,4 +1,4 @@
-ngx_module_type=CORE
+ngx_module_type=HTTP
 ngx_module_name=ngx_python_module
 ngx_module_srcs="$ngx_addon_dir/ngx_python_module.c"
 
