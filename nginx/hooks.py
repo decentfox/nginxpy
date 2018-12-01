@@ -32,3 +32,7 @@ def exit_process():
         log.debug('exit_process: %r', mod)
         mod.exit_process()
     _modules.clear()
+
+
+def post_read():
+    log.critical('post read hook!')

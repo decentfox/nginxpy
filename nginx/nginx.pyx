@@ -10,6 +10,7 @@ from .nginx_core cimport ngx_log_error
 
 from . import hooks
 
+
 cdef public ngx_int_t nginxpy_init_process(ngx_cycle_t *cycle):
     ngx_log_error(NGX_LOG_DEBUG, cycle.log, 0,
                   b'Starting init_process.')
@@ -29,6 +30,7 @@ cdef public ngx_int_t nginxpy_init_process(ngx_cycle_t *cycle):
                       b'Finished init_process.')
         return NGX_OK
 
+
 cdef public void nginxpy_exit_process(ngx_cycle_t *cycle):
     ngx_log_error(NGX_LOG_DEBUG, cycle.log, 0,
                   b'Starting exit_process.')
@@ -45,6 +47,11 @@ cdef public void nginxpy_exit_process(ngx_cycle_t *cycle):
     else:
         ngx_log_error(NGX_LOG_DEBUG, cycle.log, 0,
                       b'Finished exit_process.')
+
+
+cdef public void nginxpy_post_read():
+    hooks.post_read()
+
 
 include "log.pyx"
 include "cycle.pyx"
