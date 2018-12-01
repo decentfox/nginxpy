@@ -64,6 +64,9 @@ Development
 5. Update NGINX configuration accordingly and reload NGINX.
 6. See NGINX ``error.log`` for now.
 
+Surprisingly NGINX has a very simple but powerful architecture, learn about it
+here: http://nginx.org/en/docs/dev/development_guide.html
+
 
 Credits
 -------
