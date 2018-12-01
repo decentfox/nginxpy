@@ -3,9 +3,10 @@ python:
 - 3.7
 install: pip install -U tox-travis
 script: tox
+dist: xenial
 deploy:
   provider: pypi
-  distributions: sdist bdist_wheel
+  distributions: sdist
   user: fantix
   password:
     secure: PBnaPG9IrXOh1wxPNSJYSIz7eI2Ei3v1w2a8Sy8wWkJ/CIjIqnj6ovB+mlH2nz89Ni4pHmxQMb1rZHNEdoM4lfFcvq5/MiYAcsub+t+sa9nGD1X1sHtOqN8VMk+IumLEVTmQzjbiUcGyfSQbgTloMH4OXpyi8c4aIEMqV5gh711ytM7r1ONy118tXkqfvby6THuFarUuSC40VSJA2xFtPuTdaMKJNZdrbhh0hdFX1c4wxo/twhbiXOTAEoOTisMrJZS/ZtDFCa9+O/PSX6c0hoiQHZJQcTukPfcICpG6IsLaqt7swijCN9pmx3bbj7Ej6IwRcVvslyHzoBMo0j/LdV9x27Xp89a8bm9IUcx1DOBi//46juuC6r79/rnuyU4Mb/mKECXxmQfRKlquqIS9nYbQ1pbSSxccTesrmnfozznHDZ3zecEYeF8HqoSaxaJ4EllundQLIDlBeDC0BSs84mfBzXCoXi0N28Ln2k9vepQWryQq1U8V4GVTacLv9x9BQAKpg811vRfNLqah220Yh/Qw5OXEOUcD+9D8NrP3nTMbPRqwiMGlPUXt9IHrr8qmAgmc/d5v3lJzYEPCgD5vJeZXtz1p2pRnOXp2D9kOyB74VauFfveyNcf3+3LwN0bopMD5gmPYUxg5JuD9FPWsd3I7+74v4vP0kMgHcD3B5Xs=
@@ -13,3 +14,13 @@ deploy:
     tags: true
     repo: decentfox/nginxpy
     python: 3.7
+addons:
+  apt:
+    packages:
+    - nginx
+    - libperl-dev
+    - libgeoip-dev
+    - libgd-dev
+notifications:
+  email:
+    - foss@decentfox.com

@@ -4,19 +4,13 @@
 """Tests for `nginxpy` package."""
 
 
+import os
 import unittest
 
-from nginx import _nginx
+import nginx
 
 
 class TestNginxpy(unittest.TestCase):
-    """Tests for `nginxpy` package."""
-
-    def setUp(self):
-        """Set up test fixtures, if any."""
-
-    def tearDown(self):
-        """Tear down test fixtures, if any."""
-
-    def test_000_something(self):
-        """Test something."""
+    def test_extension(self):
+        self.assertTrue(hasattr(nginx, 'spec'))
+        self.assertTrue(os.path.exists(nginx.spec.origin))
