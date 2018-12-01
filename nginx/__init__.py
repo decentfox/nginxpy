@@ -22,7 +22,6 @@ except ImportError:
         print('Cannot import nginx, should load in nginx.conf first:')
         print()
         print(f'    load_module {spec.origin};')
-        print(f'    python_enabled on;')
         print()
     elif '' in sys.path:
         sys.modules.pop('nginx')
