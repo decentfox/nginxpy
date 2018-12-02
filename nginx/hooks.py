@@ -42,3 +42,14 @@ def post_read(request):
         if rv != ReturnCode.declined:
             return rv
     return rv
+
+
+async def post_read_async(request):
+    rv = ReturnCode.declined
+    for mod in _modules:
+        rv = await mod.post_read_async(request)
+        if rv in (ReturnCode.again,):
+            raise ValueError('post_read_async cannot return NGX_AGAIN')
+        if rv != ReturnCode.declined:
+            return rv
+    return rv

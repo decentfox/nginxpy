@@ -20,6 +20,9 @@ class BaseModule:
     def post_read(self, request):
         return ReturnCode.declined
 
+    async def post_read_async(self, request):
+        return ReturnCode.declined
+
 
 def load_modules():
     log.debug('loading modules')
