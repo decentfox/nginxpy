@@ -51,7 +51,7 @@ Installation
    ``python setup.py build`` first.
 3. Run ``python -c 'import nginx'`` to get NGINX configuration hint.
 4. Update NGINX configuration accordingly and reload NGINX.
-5. See NGINX ``error.log`` for now.
+5. Visit your NGINX site, see NGINX ``error.log`` for now.
 
 
 Development
@@ -59,10 +59,12 @@ Development
 
 1. Install NGINX in whatever way, make sure ``nginx`` command is available.
 2. Checkout source code.
-3. Run ``python setup.py build`` and ``python setup.py develop``.
+3. Run ``python setup.py develop``.
 4. Run ``python -c 'import nginx'`` to get NGINX configuration hint.
 5. Update NGINX configuration accordingly and reload NGINX.
-6. See NGINX ``error.log`` for now.
+6. Visit your NGINX site, see NGINX ``error.log`` for now.
+7. Change code if result is not satisfying, or else go for pull request.
+8. Goto 3 if Cython code was changed, or else goto 5.
 
 Surprisingly NGINX has a very simple but powerful architecture, learn about it
 here: http://nginx.org/en/docs/dev/development_guide.html

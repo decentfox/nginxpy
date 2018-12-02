@@ -8,9 +8,13 @@ import re
 import subprocess
 import sys
 import sysconfig
+
+import setuptools
+from distutils import log
 from distutils.command.build import build
 from urllib.request import urlretrieve
 from setuptools import setup, find_packages, Extension
+from setuptools.command.develop import develop
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
@@ -127,6 +131,28 @@ class nginxpy_build(build):
         super().run()
 
 
+class nginxpy_develop(develop):
+    def install_for_development(self):
+        self.reinitialize_command('build', inplace=1)
+        self.run_command('build')
+
+        self.install_site_py()  # ensure that target dir is site-safe
+        if setuptools.bootstrap_install_from:
+            self.easy_install(setuptools.bootstrap_install_from)
+            setuptools.bootstrap_install_from = None
+
+        self.install_namespaces()
+
+        # create an .egg-link in the installation dir, pointing to our egg
+        log.info("Creating %s (link to %s)", self.egg_link, self.egg_base)
+        if not self.dry_run:
+            with open(self.egg_link, "w") as f:
+                f.write(self.egg_path + "\n" + self.setup_path)
+        # postprocess the installed distro, fixing up .pth, installing scripts,
+        # and handling requirements
+        self.process_distribution(None, self.dist, not self.no_deps)
+
+
 nginxpy = Extension(
     'nginx._nginx',
     sources=[
@@ -162,7 +188,7 @@ setup(
     name='nginxpy',
     packages=find_packages(include=['nginx', 'nginx.asyncio', 'nginx.http']),
     ext_modules=[nginxpy],
-    cmdclass=dict(build=nginxpy_build),
+    cmdclass=dict(build=nginxpy_build, develop=nginxpy_develop),
     entry_points='''\
     [nginx.modules]
     100 = nginx.asyncio:AsyncioModule
