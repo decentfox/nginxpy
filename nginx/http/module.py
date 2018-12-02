@@ -18,7 +18,7 @@ class HTTPModule(BaseModule):
             log.debug('post_read end')
             return request._result()
         else:
-            log.debug('post_read start')
+            log.debug('post_read request:\n%s', request)
             return request._start(self.loop.create_task(self._handle(request)))
 
     async def _handle(self, request):

@@ -1,4 +1,7 @@
+from cpython.bytes cimport PyBytes_FromStringAndSize
+
 from .nginx_config cimport ngx_int_t, ngx_uint_t
+
 
 cdef extern from "ngx_core.h":
     const ngx_int_t NGX_OK
@@ -17,6 +20,10 @@ cdef extern from "ngx_core.h":
 
     ctypedef int ngx_err_t
     ctypedef int ngx_msec_t
+
+    ctypedef struct ngx_str_t:
+        size_t len
+        char *data
 
     ctypedef struct ngx_module_t:
         pass
@@ -37,3 +44,8 @@ cdef extern from "ngx_core.h":
                        ngx_log_t *log,
                        ngx_err_t err,
                        const char *fmt)
+
+
+cdef inline str from_nginx_str(ngx_str_t str):
+    return PyBytes_FromStringAndSize(<char*>str.data,
+                                     str.len).decode('iso-8859-1')
