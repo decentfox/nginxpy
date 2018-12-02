@@ -1,6 +1,8 @@
 import logging
 import pkg_resources
 
+from . import ReturnCode
+
 log = logging.Logger(__name__)
 _modules = []
 
@@ -15,11 +17,17 @@ class BaseModule:
     def exit_process(self):
         pass
 
+    def post_read(self, request):
+        return ReturnCode.declined
+
 
 def load_modules():
     log.debug('loading modules')
-    for ep in pkg_resources.iter_entry_points('nginx', 'module'):
-        log.debug('loading %s', ep.module_name)
+    endpoints = [ep for d in pkg_resources.working_set for ep in
+                 d.get_entry_map('nginx.modules').values()]
+    endpoints.sort(key=lambda ep: ep.name)
+    for ep in endpoints:
+        log.info('loading %s', ep.module_name)
         mod = ep.load()
-        log.debug('installing %s', mod)
+        log.info('installing %s', mod)
         _modules.append(mod())

@@ -1,6 +1,7 @@
 import asyncio
 import logging
 
+from . import ReturnCode
 from .module import load_modules, _modules
 
 log = logging.Logger(__name__)
@@ -34,5 +35,10 @@ def exit_process():
     _modules.clear()
 
 
-def post_read():
-    log.critical('post read hook!')
+def post_read(request):
+    rv = ReturnCode.declined
+    for mod in _modules:
+        rv = mod.post_read(request)
+        if rv != ReturnCode.declined:
+            return rv
+    return rv

@@ -8,7 +8,8 @@ __version__ = '0.1.0'
 
 try:
     from ._nginx import (
-        Cycle, Log, get_current_cycle,
+        Cycle, Log, get_current_cycle, ReturnCode,
+        Request,
         NginxEventLoop, NginxEventLoopPolicy, Event,
     )
 except ImportError:

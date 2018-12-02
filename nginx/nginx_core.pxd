@@ -3,6 +3,8 @@ from .nginx_config cimport ngx_int_t, ngx_uint_t
 cdef extern from "ngx_core.h":
     const ngx_int_t NGX_OK
     const ngx_int_t NGX_ERROR
+    const ngx_int_t NGX_DECLINED
+    const ngx_int_t NGX_AGAIN
 
     const int NGX_LOG_EMERG
     const int NGX_LOG_ALERT
@@ -15,6 +17,9 @@ cdef extern from "ngx_core.h":
 
     ctypedef int ngx_err_t
     ctypedef int ngx_msec_t
+
+    ctypedef struct ngx_module_t:
+        pass
 
     ctypedef struct ngx_log_t:
         pass

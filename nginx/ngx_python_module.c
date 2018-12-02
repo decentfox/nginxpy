@@ -1,9 +1,4 @@
-#include <ngx_config.h>
-#include <ngx_core.h>
-#include <ngx_http.h>
-#include <Python.h>
-#include "nginx.h"
-
+#include "ngx_python_module.h"
 
 static ngx_int_t ngx_python_init_process(ngx_cycle_t *cycle);
 static void ngx_python_exit_process(ngx_cycle_t *cycle);
@@ -100,6 +95,5 @@ ngx_python_postconfiguration(ngx_conf_t *cf) {
 
 static ngx_int_t
 ngx_python_post_read(ngx_http_request_t *r) {
-    nginxpy_post_read();
-    return NGX_OK;
+    return nginxpy_post_read(r);
 }

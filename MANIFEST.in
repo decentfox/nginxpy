@@ -4,6 +4,7 @@ include HISTORY.rst
 include LICENSE
 include README.rst
 include nginx/config
+include nginx/ngx_python_module.h
 
 recursive-include nginx *.pyx
 recursive-include nginx *.pxd

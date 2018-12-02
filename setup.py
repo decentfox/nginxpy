@@ -139,6 +139,7 @@ nginxpy = Extension(
         'nginx/cycle.pyx',
         'nginx/log.pyx',
         'nginx/asyncio/loop.pyx',
+        'nginx/http/http.pyx',
     ])
 
 setup(
@@ -159,12 +160,13 @@ setup(
     include_package_data=True,
     keywords='nginxpy',
     name='nginxpy',
-    packages=find_packages(include=['nginx', 'nginx.asyncio']),
+    packages=find_packages(include=['nginx', 'nginx.asyncio', 'nginx.http']),
     ext_modules=[nginxpy],
     cmdclass=dict(build=nginxpy_build),
     entry_points='''\
-    [nginx]
-    module = nginx.asyncio:AsyncioModule
+    [nginx.modules]
+    100 = nginx.asyncio:AsyncioModule
+    200 = nginx.http:HTTPModule
     ''',
     test_suite='tests',
     tests_require=test_requirements,

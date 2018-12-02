@@ -1,14 +1,24 @@
 # cython: language_level=3
 
 import traceback
+from enum import IntEnum
 
 from .nginx_config cimport ngx_int_t
-from .nginx_core cimport ngx_cycle_t
-from .nginx_core cimport NGX_OK, NGX_ERROR
+from .nginx_core cimport ngx_module_t, ngx_cycle_t
+from .nginx_core cimport NGX_OK, NGX_ERROR, NGX_DECLINED, NGX_AGAIN
 from .nginx_core cimport NGX_LOG_DEBUG, NGX_LOG_CRIT
 from .nginx_core cimport ngx_log_error
 
-from . import hooks
+
+cdef extern from "ngx_python_module.h":
+    ngx_module_t ngx_python_module
+
+
+class ReturnCode(IntEnum):
+    ok = NGX_OK
+    error = NGX_ERROR
+    declined = NGX_DECLINED
+    again = NGX_AGAIN
 
 
 cdef public ngx_int_t nginxpy_init_process(ngx_cycle_t *cycle):
@@ -16,6 +26,7 @@ cdef public ngx_int_t nginxpy_init_process(ngx_cycle_t *cycle):
                   b'Starting init_process.')
     # noinspection PyBroadException
     try:
+        from . import hooks
         global current_cycle
         current_cycle = Cycle.from_ptr(cycle)
         set_last_resort(current_cycle.log)
@@ -36,6 +47,7 @@ cdef public void nginxpy_exit_process(ngx_cycle_t *cycle):
                   b'Starting exit_process.')
     # noinspection PyBroadException
     try:
+        from . import hooks
         global current_cycle
         hooks.exit_process()
         unset_last_resort()
@@ -49,10 +61,7 @@ cdef public void nginxpy_exit_process(ngx_cycle_t *cycle):
                       b'Finished exit_process.')
 
 
-cdef public void nginxpy_post_read():
-    hooks.post_read()
-
-
 include "log.pyx"
 include "cycle.pyx"
+include "http/http.pyx"
 include "asyncio/loop.pyx"
