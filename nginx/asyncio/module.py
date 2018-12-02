@@ -1,11 +1,9 @@
 import asyncio
-import logging
 
+from . import log
 from .. import NginxEventLoopPolicy
 from ..module import BaseModule
 from ..hooks import after_init_process
-
-log = logging.Logger(__name__)
 
 
 class AsyncioModule(BaseModule):

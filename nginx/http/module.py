@@ -1,10 +1,8 @@
 import asyncio
-import logging
 
+from . import log
 from .._nginx import run_phases
 from ..module import BaseModule, ReturnCode
-
-log = logging.getLogger(__name__)
 
 
 class HTTPModule(BaseModule):
