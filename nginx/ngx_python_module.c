@@ -3,7 +3,6 @@
 static ngx_int_t ngx_python_init_process(ngx_cycle_t *cycle);
 static void ngx_python_exit_process(ngx_cycle_t *cycle);
 static ngx_int_t ngx_python_postconfiguration(ngx_conf_t *cf);
-static ngx_int_t ngx_python_post_read(ngx_http_request_t *r);
 
 static wchar_t *python_exec = NULL;
 
@@ -88,12 +87,7 @@ ngx_python_postconfiguration(ngx_conf_t *cf) {
     if (h == NULL) {
         return NGX_ERROR;
     }
-    *h = ngx_python_post_read;
+    *h = nginxpy_post_read;
 
     return NGX_OK;
-}
-
-static ngx_int_t
-ngx_python_post_read(ngx_http_request_t *r) {
-    return nginxpy_post_read(r);
 }
