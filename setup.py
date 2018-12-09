@@ -188,7 +188,7 @@ setup(
     name='nginxpy',
     packages=find_packages(include=['nginx', 'nginx.asyncio', 'nginx.http']),
     ext_modules=[nginxpy],
-    cmdclass=dict(build=nginxpy_build, develop=nginxpy_develop),
+    cmdclass=dict(build=nginxpy_build),
     entry_points='''\
     [nginx.modules]
     100 = nginx.asyncio:AsyncioModule

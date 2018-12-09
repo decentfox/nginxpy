@@ -59,7 +59,7 @@ Development
 
 1. Install NGINX in whatever way, make sure ``nginx`` command is available.
 2. Checkout source code.
-3. Run ``python setup.py develop``.
+3. Run ``python setup.py build && python setup.py develop``.
 4. Run ``python -c 'import nginx'`` to get NGINX configuration hint.
 5. Update NGINX configuration accordingly and reload NGINX.
 6. Visit your NGINX site, see NGINX ``error.log`` for now.
