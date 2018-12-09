@@ -3,6 +3,7 @@
 #include <ngx_http.h>
 #include <Python.h>
 #include "nginx.h"
+#include "ngx_python_module.h"
 
 
 static ngx_int_t ngx_python_init_process(ngx_cycle_t *cycle);
@@ -16,9 +17,6 @@ static void *ngx_http_wsgi_create_loc_conf(ngx_conf_t *cf);
 static char *ngx_handle_app(ngx_conf_t *cf, ngx_command_t *cmd, void *conf);
 static ngx_conf_post_t  ngx_wsgi_pass_post = { ngx_handle_app };
 
-typedef struct {
-    ngx_str_t  wsgi_pass;
-} ngx_wsgi_pass_conf_t;
 
 static ngx_command_t  ngx_wsgi_commands[] = {
     { ngx_string("wsgi_pass"),
@@ -109,7 +107,7 @@ ngx_python_postconfiguration(ngx_conf_t *cf) {
 
     cmcf = ngx_http_conf_get_module_main_conf(cf, ngx_http_core_module);
 
-    h = ngx_array_push(&cmcf->phases[NGX_HTTP_POST_READ_PHASE].handlers);
+    h = ngx_array_push(&cmcf->phases[NGX_HTTP_PRECONTENT_PHASE].handlers);
     if (h == NULL) {
         return NGX_ERROR;
     }
