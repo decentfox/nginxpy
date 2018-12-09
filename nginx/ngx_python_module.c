@@ -12,6 +12,27 @@ static ngx_int_t ngx_python_postconfiguration(ngx_conf_t *cf);
 static wchar_t *python_exec = NULL;
 
 
+static void *ngx_http_wsgi_create_loc_conf(ngx_conf_t *cf);
+static char *ngx_handle_app(ngx_conf_t *cf, ngx_command_t *cmd, void *conf);
+static ngx_conf_post_t  ngx_wsgi_pass_post = { ngx_handle_app };
+
+typedef struct {
+    ngx_str_t  wsgi_pass;
+} ngx_wsgi_pass_conf_t;
+
+static ngx_command_t  ngx_wsgi_commands[] = {
+    { ngx_string("wsgi_pass"),
+      NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_HTTP_LMT_CONF|NGX_CONF_TAKE1,
+      ngx_conf_set_str_slot,
+      NGX_HTTP_LOC_CONF_OFFSET,
+      offsetof(ngx_wsgi_pass_conf_t, wsgi_pass),
+      &ngx_wsgi_pass_post,
+     },
+
+      ngx_null_command
+};
+
+
 static ngx_http_module_t  ngx_python_module_ctx  = {
     NULL,                                  /* preconfiguration */
     ngx_python_postconfiguration,          /* postconfiguration */
@@ -22,7 +43,7 @@ static ngx_http_module_t  ngx_python_module_ctx  = {
     NULL,                                  /* create server configuration */
     NULL,                                  /* merge server configuration */
 
-    NULL,                                  /* create location configuration */
+    ngx_http_wsgi_create_loc_conf,         /* create location configuration */
     NULL                                   /* merge location configuration */
 };
 
@@ -30,7 +51,7 @@ static ngx_http_module_t  ngx_python_module_ctx  = {
 ngx_module_t  ngx_python_module = {
         NGX_MODULE_V1,
         &ngx_python_module_ctx,                /* module context */
-        NULL,                                  /* module directives */
+        ngx_wsgi_commands,                                  /* module directives */
         NGX_HTTP_MODULE,                       /* module type */
         NULL,                                  /* init master */
         NULL,                                  /* init module */
@@ -95,4 +116,32 @@ ngx_python_postconfiguration(ngx_conf_t *cf) {
     *h = nginxpy_post_read;
 
     return NGX_OK;
+}
+
+
+static void *
+ngx_http_wsgi_create_loc_conf(ngx_conf_t *cf)
+{
+    ngx_wsgi_pass_conf_t  *conf;
+
+    conf = ngx_pcalloc(cf->pool, sizeof(ngx_wsgi_pass_conf_t));
+    if (conf == NULL) {
+        return NULL;
+    }
+
+    return conf;
+}
+
+
+static char *
+ngx_handle_app(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
+{
+    ngx_wsgi_pass_conf_t *wac = conf;
+    if (wac->wsgi_pass.len > 0) {
+        ngx_log_error(NGX_LOG_NOTICE, cf->log, 0, "get application %s", wac->wsgi_pass.data);
+    } else {
+        ngx_log_error(NGX_LOG_NOTICE, cf->log, 0, "no wsgi_pass found");
+    }
+
+    return NGX_CONF_OK;
 }
