@@ -4,7 +4,7 @@ import traceback
 from enum import IntEnum
 
 from .nginx_config cimport ngx_int_t
-from .nginx_core cimport ngx_module_t, ngx_cycle_t
+from .nginx_core cimport ngx_module_t, ngx_cycle_t, ngx_str_t
 from .nginx_core cimport NGX_OK, NGX_ERROR, NGX_DECLINED, NGX_AGAIN
 from .nginx_core cimport NGX_LOG_DEBUG, NGX_LOG_CRIT
 from .nginx_core cimport ngx_log_error
@@ -12,6 +12,8 @@ from .nginx_core cimport ngx_log_error
 
 cdef extern from "ngx_python_module.h":
     ngx_module_t ngx_python_module
+    ctypedef struct ngx_wsgi_pass_conf_t:
+        ngx_str_t  wsgi_pass
 
 
 class ReturnCode(IntEnum):

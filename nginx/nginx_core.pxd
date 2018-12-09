@@ -26,6 +26,7 @@ cdef extern from "ngx_core.h":
         char *data
 
     ctypedef struct ngx_module_t:
+        ngx_uint_t ctx_index
         pass
 
     ctypedef struct ngx_log_t:
@@ -40,6 +41,7 @@ cdef extern from "ngx_core.h":
 
     void *ngx_calloc(size_t size, ngx_log_t *log)
     void ngx_free(void *p)
+    void *ngx_memcpy(void *dst, const void *src, size_t n)
     void ngx_log_error(ngx_uint_t level,
                        ngx_log_t *log,
                        ngx_err_t err,
